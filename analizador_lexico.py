@@ -18,6 +18,7 @@ reserved = {
 tokens = list(reserved.values()) + [
     'IDENTIFICADOR',
     'ENTERO',
+    'CADENA',  # Token para cadenas de texto
     'ASIGNAR',
     'SUMA',
     'RESTA',
@@ -68,6 +69,11 @@ t_LLAIZQ = r'{'
 t_LLADER = r'}'
 
 t_ignore = ' \t'
+
+def t_CADENA(t):
+    r'\"([^\\\n]|(\\.))*?\"'
+    t.value = t.value[1:-1]  # quitar las comillas
+    return t
 
 def t_INT(t):
     r'int'
