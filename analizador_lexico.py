@@ -71,8 +71,8 @@ t_LLADER = r'}'
 t_ignore = ' \t'
 
 def t_CADENA(t):
-    r'\"([^\\\n]|(\\.))*?\"'
-    t.value = t.value[1:-1]  # quitar las comillas
+    r'\([^\)]*\)'
+    t.value = t.value[1:-1]  # quitar los paréntesis
     return t
 
 def t_INT(t):
@@ -167,3 +167,4 @@ resultado_text.pack(padx=10, pady=10)
 
 # Iniciar la interfaz gráfica
 ventana.mainloop()
+
