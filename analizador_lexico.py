@@ -68,11 +68,11 @@ t_PARDER = r'\)'
 t_LLAIZQ = r'{'
 t_LLADER = r'}'
 
-t_ignore = ' \t'
+t_ignore = ' \t\n'
 
 def t_CADENA(t):
     r'\([^\)]*\)'
-    t.value = t.value[1:-1]  # quitar los paréntesis
+    t.value = t.value[1:-1]  
     return t
 
 def t_INT(t):
@@ -81,7 +81,7 @@ def t_INT(t):
 
 def t_FUNC(t):
     r'func\s+[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value, 'FUNC')  # Busca en las palabras reservadas
+    t.type = reserved.get(t.value, 'FUNC')  
     return t
 
 def t_REPEAT(t):
@@ -125,22 +125,29 @@ def t_error(t):
     resultado_lexema.append(estado)
     t.lexer.skip(1)
 
-# Función para realizar el análisis léxico
+# Función para limpiar el cuadro de texto de entrada
+def limpiar_entrada():
+    entrada_text.delete("1.0", tk.END)
+
+# Función para realizar el análisis léxico y formatear los resultados
 def analizar_lexico(data):
     global resultado_lexema
     analizador = lex.lex()
     analizador.input(data)
 
     resultado_lexema.clear()
+    resultados_formateados = []
+
+    # Encabezado de la tabla
+    resultados_formateados.append(f'{"VALOR":<30}{"LEXEMA":<20}')
     while True:
         tok = analizador.token()
         if not tok:
             break
-        estado = "Línea {:4} Tipo {:16} Valor {:16} Posición {:4}".format(
-            str(tok.lineno), str(tok.type), str(tok.value), str(tok.lexpos)
-        )
-        resultado_lexema.append(estado)
-    return resultado_lexema
+        resultado = f'{str(tok.value):<30}{str(tok.type):<20}'
+        resultados_formateados.append(resultado)
+    
+    return resultados_formateados 
 
 # Función que se llama al presionar el botón de análisis léxico
 def analizar():
@@ -154,12 +161,20 @@ ventana = tk.Tk()
 ventana.title("Analizador Léxico")
 
 # Cuadro de texto de entrada
-entrada_text = scrolledtext.ScrolledText(ventana, width=40, height=10, wrap=tk.WORD)
+entrada_text = scrolledtext.ScrolledText(ventana, width=90, height=0, wrap=tk.WORD)
 entrada_text.pack(padx=10, pady=10)
 
+# Marco para los botones
+botones_frame = tk.Frame(ventana)
+botones_frame.pack(pady=10)
+
 # Botón de análisis léxico
-analizar_button = tk.Button(ventana, text="Analizar", command=analizar)
-analizar_button.pack(pady=10)
+analizar_button = tk.Button(botones_frame, text="Analizar", command=analizar)
+analizar_button.pack(side=tk.LEFT, padx=5)
+
+# Botón para limpiar la entrada
+limpiar_button = tk.Button(botones_frame, text="Limpiar", command=limpiar_entrada)
+limpiar_button.pack(side=tk.LEFT, padx=5)
 
 # Cuadro de texto de resultado (más grande)
 resultado_text = scrolledtext.ScrolledText(ventana, width=60, height=20, wrap=tk.WORD)
