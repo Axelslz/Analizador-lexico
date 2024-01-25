@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import scrolledtext
 import tkinter.messagebox as messagebox
-from analizador_lexico import analizadorlexico  # Importa la clase LexerAnalyzer
+from analizador_lexico import analizadorlexico  
 
 # Función para limpiar el cuadro de texto de entrada
 def limpiar_entrada():
@@ -9,8 +9,8 @@ def limpiar_entrada():
 
 # Función para realizar el análisis léxico y formatear los resultados
 def analizar_lexico(data):
-    lexer_analyzer = analizadorlexico()  # Instanciar el analizador léxico personalizado
-    result = lexer_analyzer.analyze(data)  # Analizar la entrada
+    lexer_analyzer = analizadorlexico()  
+    result = lexer_analyzer.analyze(data)  
 
     resultados_formateados = []
     resultados_formateados.append(f'{"VALOR":<30}{"TOKEN":<20}')
@@ -18,19 +18,19 @@ def analizar_lexico(data):
         resultado = f'{str(tok_value):<30}{str(tok_type):<20}'
         resultados_formateados.append(resultado)
 
-    return resultados_formateados 
+    return resultados_formateados, lexer_analyzer.error_list
 
 # Función que se llama al presionar el botón de análisis léxico
 def analizar():
     entrada = entrada_text.get("1.0", tk.END)
-    lexer_analyzer = analizadorlexico()  # Instanciar el analizador léxico personalizado
-    resultado = analizar_lexico(entrada)
+    lexer_analyzer = analizadorlexico()  
+    resultado, errores = analizar_lexico(entrada)
     resultado_text.delete("1.0", tk.END)
     resultado_text.insert(tk.END, "\n".join(resultado))
     
     # Mostrar alerta si hay tokens desconocidos
-    if lexer_analyzer.error_list:
-        messagebox.showerror("Errores encontrados", "\n".join(lexer_analyzer.error_list))
+    if errores:
+        messagebox.showerror("Errores encontrados", "\n".join(errores))
 
 # Crear la interfaz gráfica
 ventana = tk.Tk()
@@ -53,7 +53,7 @@ limpiar_button = tk.Button(botones_frame, text="Limpiar", command=limpiar_entrad
 limpiar_button.pack(side=tk.LEFT, padx=5)
 
 # Cuadro de texto de resultado (más grande)
-resultado_text = scrolledtext.ScrolledText(ventana, width=60, height=20, wrap=tk.WORD)
+resultado_text = scrolledtext.ScrolledText(ventana, width=60, height=25, wrap=tk.WORD)
 resultado_text.pack(padx=10, pady=10)
 
 # Iniciar la interfaz gráfica

@@ -1,6 +1,6 @@
 int $numero = 10;
 func suma(int $a, int $b){retornar $a + $b;}
 repeat (int $i = 0; $i < 10; $i++) {echo($i);}
-if ($numero > 5) {echo(El número es mayor a 5);} else {echo(El número es menor a 5);}
-func main() {echo(Inicio del programa);}
+if ($numero > 5) {echo("El número es mayor a 5");} else {echo("El número es menor a 5");}
+func main() {echo("Inicio del programa");}
 
